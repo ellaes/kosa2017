@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<context:component-scan base-package="com.coderby.myapp.hr.controller"/>
+	
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	<mvc:view-controller path="/" view-name="home"/>
+	
+	<mvc:resources location="/WEB-INF/resources/images/" mapping="/images/**"/>
+	<mvc:resources location="/WEB-INF/resources/js/" mapping="/js/**"/>
+	<mvc:resources location="/WEB-INF/resources/css/" mapping="/css/**"/>
+	<mvc:resources location="/WEB-INF/resources/plugins/" mapping="/plugins/**"/>
+	<mvc:resources location="/WEB-INF/resources/scss/" mapping="/scss/**"/>
+	<mvc:resources location="/WEB-INF/resources/img/" mapping="/img/**"/>
+	<!-- 인터셉터 설정 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/hr/list"/> 
+			<bean class="com.coderby.myapp.common.LoginCheckInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<!--  인터셉터 설정 이렇게도 가능함
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/hr/list"/> 
+			<bean class="com.coderby.myapp.common.LoginCheckInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<bean id="loginCheckInterceptor" class="com.coderby.myapp.common.LoginCheckInterceptor"/>
+	-->
+	
+	<!-- validator 빈 설정 -->
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>	
+	<mvc:annotation-driven validator="validator"/>
+	
+</beans>
